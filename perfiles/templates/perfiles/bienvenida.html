@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Bienvenido{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}                          
+        <h1>Hola {{ user.username }}</h1>
+        <div class="container-fluid">
+            <div class="row">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div class="position-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                                    <span data-feather="home"></span>
+                                    Inicio
+                                </button>
+                                <div class="collapse show" id="home-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                        <li><a href="#" class="link-dark rounded">Overview</a></li>
+                                        <li><a href="#" class="link-dark rounded">Updates</a></li>
+                                        <li><a href="#" class="link-dark rounded">Reports</a></li>
+                                    </ul>
+                                </div>            
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                                    <span data-feather="file"></span>
+                                    Orden de Venta
+                                </button>
+                                <div class="collapse" id="orders-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                        <li><a href="#" class="link-dark rounded">Ingresar</a></li>
+                                        <li><a href="#" class="link-dark rounded">Actualizar</a></li>
+                                        <li><a href="#" class="link-dark rounded">Listar</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                                    <span data-feather="shopping-cart"></span>
+                                    Productos
+                                </button>
+                                <div class="collapse" id="dashboard-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                        <li><a href="#" class="link-dark rounded">Ingresar</a></li>
+                                        <li><a href="#" class="link-dark rounded">Actualizar</a></li>
+                                        <li><a href="#" class="link-dark rounded">Listar</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                                    <span data-feather="users"></span>
+                                    Clientes
+                                </button>
+                                <div class="collapse" id="account-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                        <li><a href="#" class="link-dark rounded">Ingresar</a></li>
+                                        <li><a href="#" class="link-dark rounded">Actualizar</a></li>
+                                        <li><a href="#" class="link-dark rounded">Listar</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                                
+                </main>
+            </div>
+        </div>
+    {% else %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="{% url 'sign_up' %}" class="btn btn-dark btn-lg">Registrate</a>
+        <br>
+        <br>
+        <a href="{% url 'sign_in' %}" class="btn btn-dark btn-lg">Iniciar sesión</a>
+    </div>
+    {% endif %}
+{% endblock content %}
