@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'venta',
     'perfiles',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

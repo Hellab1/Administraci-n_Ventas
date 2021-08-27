@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lista Clientes{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %} 
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                <th>RUT</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>            
+            <!-- Recorremos los objetos o registros que tenemos en nuestra tabla 'cliente' y los listamos -->
+            {% for cliente in object_list %}
+                <tr>
+                <td>{{ cliente.rut_cliente }}</td>
+                <td>{{ cliente.nombre_cliente }}</td>
+                <td>{{ cliente.direccion }}</td>
+                <td>
+            
+                    <!-- Usaremos un formulario que realizará la tarea de eliminar un registro o cliente desde la misma tabla HTML -->                        
+                    <form method="POST" action="eliminar/{{cliente.id_cliente}}">
+                    {% csrf_token %}
+                    <div class="btn-group">
+            
+                        <!-- Creamos 3 botones que son ver, Editar y Eliminar, nos sirven para gestionar nuestros registros o clientes -->
+                        <a href="editar/{{cliente.id_cliente}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
+                        <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                        Eliminar
+                        </button>
+                    </div>
+                    </form>
+            
+                </td>
+                </tr>
+            {% endfor %}            
+            </tbody>
+        </table>
+    <script type="text/javascript">
+        function eliminar() {
+          var x = confirm("Eliminar cliente ?");
+          if (x)
+            return true;
+          else
+            return false;
+        }
+    </script>       
+    {% else %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="{% url 'sign_up' %}" class="btn btn-dark btn-lg">Registrate</a>
+        <br>
+        <br>
+        <a href="{% url 'sign_in' %}" class="btn btn-dark btn-lg">Iniciar sesión</a>
+    </div>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %}Actualizar Orden{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}                          
+    <form method="post" enctype="multipart/form-data">  
+        {% csrf_token %}   
+        <br>                 
+            <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha Compra</label>
+                {{ form.fecha_compra|add_class:"form-control"| attr:"type:date" }} 
+            </div>
+            <div class="mb-3">
+                <label for="tipo" class="form-label">Tipo de Compra</label>
+                {{ form.tipo_compra|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="pago" class="form-label">Forma de Pago</label>
+                {{ form.forma_pago|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="facturacion" class="form-label">Tipo de Facturacióno</label>
+                {{ form.tipo_facturacion|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente</label>
+                {{ form.cliente|add_class:"form-select" }} 
+            </div>
+            <div class="mb-3">
+                <label for="Producto" class="form-label">Productos</label>
+                {{ form.producto|add_class:"form-select" }}
+            </div>
+            <br>            
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+            <a href="./" type="submit" class="btn btn-primary">Cancelar</a>                   
+        </form>
+    {% else %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="{% url 'sign_up' %}" class="btn btn-dark btn-lg">Registrate</a>
+        <br>
+        <br>
+        <a href="{% url 'sign_in' %}" class="btn btn-dark btn-lg">Iniciar sesión</a>
+    </div>
+    {% endif %}
+{% endblock content %}
