@@ -37,7 +37,7 @@
             
                         <!-- Creamos 3 botones que son ver, Editar y Eliminar, nos sirven para gestionar nuestros registros o clientes -->
                         <a href="editar/{{cliente.id_cliente}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
-                        <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                        <button class="btn btn-danger" onclick="return eliminar('{{cliente.nombre_cliente}}');" type="submit">
                         Eliminar
                         </button>
                     </div>
@@ -49,29 +49,13 @@
             </tbody>
         </table>
     <script type="text/javascript">
-        function eliminar() {
-          var x = confirm("Eliminar cliente ?");
+        function eliminar(nombre) {
+          var x = confirm("Eliminar cliente " + nombre + "?");
           if (x)
             return true;
           else
             return false;
         }
-    </script>       
-    {% else %}
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="{% url 'sign_up' %}" class="btn btn-dark btn-lg">Registrate</a>
-        <br>
-        <br>
-        <a href="{% url 'sign_in' %}" class="btn btn-dark btn-lg">Iniciar sesión</a>
-    </div>
+    </script>
     {% endif %}
 {% endblock content %}

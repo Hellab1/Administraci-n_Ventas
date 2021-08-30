@@ -39,7 +39,7 @@
                     {% csrf_token %}
                     <div class="btn-group">                   
                         <a href="editar/{{producto.id_producto}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
-                        <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                        <button class="btn btn-danger" onclick="return eliminar('{{producto.nombre_producto}} {{producto.espesor}}');" type="submit">
                         Eliminar
                         </button>
                     </div>
@@ -49,22 +49,15 @@
             {% endfor %}
             
             </tbody>
-            </table>   
-    {% else %}
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="{% url 'sign_up' %}" class="btn btn-dark btn-lg">Registrate</a>
-        <br>
-        <br>
-        <a href="{% url 'sign_in' %}" class="btn btn-dark btn-lg">Iniciar sesión</a>
-    </div>
+        </table> 
+        <script type="text/javascript">
+            function eliminar(nombre) {
+              var x = confirm("Eliminar Producto " + nombre + " mm?");
+              if (x)
+                return true;
+              else
+                return false;
+            }
+        </script>
     {% endif %}
 {% endblock content %}
