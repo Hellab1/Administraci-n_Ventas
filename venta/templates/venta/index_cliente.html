@@ -12,7 +12,7 @@
 {% endblock header%}
 {% block content %}
     {% if user.is_authenticated %} 
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover" id="clientes">
             <thead>
                 <tr>
                 <th>RUT</th>
@@ -45,9 +45,9 @@
             
                 </td>
                 </tr>
-            {% endfor %}            
+            {% endfor %}                       
             </tbody>
-        </table>
+        </table>        
     <script type="text/javascript">
         function eliminar(nombre) {
           var x = confirm("Eliminar cliente " + nombre + "?");

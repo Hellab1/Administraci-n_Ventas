@@ -16,33 +16,41 @@
         <form method="post" enctype="multipart/form-data">  
             {% csrf_token %}   
             <br>                 
-                <div class="mb-3">
-                    <label for="fecha" class="form-label">Fecha Compra</label>
-                    {{ form.fecha_compra|add_class:"form-control"| attr:"type:date" }} 
-                </div>
-                <div class="mb-3">
-                    <label for="tipo" class="form-label">Tipo de Compra</label>
-                    {{ form.tipo_compra|add_class:"form-control" }} 
-                </div>
-                <div class="mb-3">
-                    <label for="pago" class="form-label">Forma de Pago</label>
-                    {{ form.forma_pago|add_class:"form-control" }} 
-                </div>
-                <div class="mb-3">
-                    <label for="facturacion" class="form-label">Tipo de Facturacióno</label>
-                    {{ form.tipo_facturacion|add_class:"form-control" }} 
-                </div>
-                <div class="mb-3">
-                    <label for="cliente" class="form-label">Cliente</label>
-                    {{ form.cliente|add_class:"form-select" }} 
-                </div>
-                <div class="mb-3">
-                    <label for="Producto" class="form-label">Productos</label>
-                    {{ form.producto|add_class:"form-select" }}
-                </div>
-                <br>            
-                <button type="submit" class="btn btn-primary">Aceptar</button>
-                <a href="./" type="submit" class="btn btn-primary">Cancelar</a>                   
-            </form>
+            <div class="mb-3">
+                <label for="num_pedido" class="form-label">Número de Pedido</label>
+                {{ form.num_pedido|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha Compra</label>
+                {{ form.fecha_compra|add_class:"form-control"| attr:"type:date" }} 
+            </div>
+            <div class="mb-3">
+                <label for="tipo" class="form-label">Tipo de Pago</label>
+                {{ form.tipo_pago|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="pago" class="form-label">Forma de Pago</label>
+                {{ form.forma_pago|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="facturacion" class="form-label">Tipo de Facturacióno</label>
+                {{ form.tipo_facturacion|add_class:"form-control" }} 
+            </div>
+            <div class="mb-3">
+                <label for="cliente" class="form-label">Cliente</label>
+                {{ form.cliente|add_class:"form-select" }} 
+            </div>
+            <div class="mb-3">
+                <label for="iva" class="form-label">IVA</label>
+                <input class="form-control" type="number" value="0" name="iva" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="total" class="form-label">Total</label>
+                <input class="form-control" type="number" value="0" name="total" readonly >
+            </div>
+            <br>            
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+            <a href="./" type="submit" class="btn btn-primary">Cancelar</a>                   
+        </form>
     {% endif %}
 {% endblock content %}

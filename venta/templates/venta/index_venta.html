@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lista Orden{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}                        
+    <div class="container">
+        <div class="start-template">
+            <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                    <i class="fa fa-trash"></i> Eliminar
+                </button>
+            </div>
+          <table id="tabla" data-toggle="table"
+            data-classes="table table-hover table-condensed"
+            data-row-style="rowStyle"
+            data-show-toggle="true"
+            data-sort-name="titulo"
+            data-pagination="true"
+            data-page-list="[10, 25, 50, 100, all]"
+            data-url="{% url 'ventas_list' %}">
+              <thead>
+                <tr>
+                  <th data-field="num_pedido" data-sortable="true">Número de pedido</th>
+                  <th data-field="cliente_name">Cliente</th>
+                  <th data-field="fecha_compra">Fecha de Compra</th>
+                  <th data-field="detalle">Detalle</th>
+                  <th data-field="iva">IVA</th>
+                  <th data-field="total">Total</th>
+                </tr>
+              </thead>
+           </table>
+        </div>
+      </div>
+    {% endif %}
+{% endblock content %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        function rowStyle(row, index) {
+           var celda = row['status'];
+           switch(celda) {
+               case 'Agotado':
+                   return { classes: 'warning'}
+                   break;
+               case 'Descontinuado':
+                   return { classes: 'danger'}
+                   break;
+               default:
+                   return { classes: 'default'}
+           }
+       };
+    </script>
+{% endblock extra_js %}

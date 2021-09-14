@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Crear Orden{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}                          
+        <form method="post" enctype="multipart/form-data">  
+            {% csrf_token %}   
+            <br>                 
+            <div class="mb-3">
+                <label for="producto" class="form-label">Producto</label>
+                {{ form.producto|add_class:"form-select" }} 
+            </div>
+            <br>
+            <div class="mb-3">
+                <label for="orden" class="form-label">Orden</label>
+                {{ form.orden_venta|add_class:"form-control" }} 
+            </div>
+            <br>
+            <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad</label>
+                {{ form.cantidad|add_class:"form-control" }} 
+            </div>
+            <br>
+            <div class="mb-3">
+                <label for="total" class="form-label">Total</label>
+                <input class="form-control" type="number" value="0" name="total_detalle" readonly >
+            </div>
+            <br>            
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+            <a href="{% url 'leer_ot' %}" type="submit" class="btn btn-primary">Volver</a>                   
+        </form>
+    {% endif %}
+{% endblock content %}

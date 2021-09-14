@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # Instanciamos los modelos para poder usarlo en nuestras Vistas CRUD
-from .models import Cliente, Producto, Orden_Compra
+from .models import Cliente, Detalle_Venta, Producto, Orden_Compra
 # Nos sirve para redireccionar despues de una acción revertiendo patrones de expresiones regulares 
 from django.urls import reverse 
 # Habilitamos el uso de mensajes en Django
@@ -13,6 +13,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 # Habilitamos los formularios en Django
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from rest_framework import generics
+from .serializers import ventaSerializer
 
 # Create your views here.
 class ClienteListado(LoginRequiredMixin, ListView): 
@@ -28,9 +31,9 @@ class ClienteCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_success_url(self):        
         return reverse('leer_cliente') # Redireccionamos a la vista principal 'leer'
 
-class ClienteDetalle(LoginRequiredMixin, DetailView): 
+"""class ClienteDetalle(LoginRequiredMixin, DetailView): 
     model = Cliente # Llamamos a la clase 'Cliente' que se encuentra en nuestro archivo 'models.py'
-    login_url = '/iniciar-sesion/'
+    login_url = '/iniciar-sesion/' """
 
 class ClienteActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
     model = Cliente # Llamamos a la clase 'Cliente' que se encuentra en nuestro archivo 'models.py' 
@@ -66,10 +69,6 @@ class ProductoCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_success_url(self):        
         return reverse('leer_producto') 
 
-class ProductoDetalle(LoginRequiredMixin, DetailView): 
-    model = Producto 
-    login_url = '/iniciar-sesion/'
-
 class ProductoActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
     model = Producto 
     form = Producto
@@ -97,13 +96,13 @@ class OTCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Orden_Compra
     form = Orden_Compra
     fields = "__all__" 
-    success_message = 'Orden de Compra Creada Correctamente !' 
+    success_message = 'Orden de Compra Creada Correctamente!' 
     login_url = '/iniciar-sesion/'
     def get_success_url(self):        
         return reverse('leer_ot') 
 
 class OTDetalle(LoginRequiredMixin, DetailView): 
-    model = Orden_Compra 
+    model = Orden_Compra
     login_url = '/iniciar-sesion/'
 
 class OTActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
@@ -125,5 +124,19 @@ class OTEliminar(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         messages.success (self.request, (success_message))       
         return reverse('leer_ot') 
 
-def ventas():
-    'hola mundo'
+class DetalleCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView): 
+    model = Detalle_Venta
+    form = Detalle_Venta
+    fields = "__all__" 
+    success_message = 'Detalle Creado Correctamente !' 
+    login_url = '/iniciar-sesion/'
+    def get_success_url(self):        
+        return reverse('leer_ot') 
+
+class ventasList(generics.ListAPIView):
+    queryset = Orden_Compra.objects.all()
+    serializer_class = ventaSerializer
+
+def crear_detalle(request):
+      parametro = request.GET.get("parametro","")
+

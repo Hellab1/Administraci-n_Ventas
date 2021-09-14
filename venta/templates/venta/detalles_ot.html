@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lista Orden{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}        
+    <h4>Detalles</h4>
+    
+    <p><span class="txt_negrita">ID Compra:</span> <br> {{object.id_compra}}</p>
+    <p><span class="txt_negrita">Número de Pedido:</span> <br> {{object.num_pedido}}</p>
+    <p><span class="txt_negrita">Tipo de pago:</span> <br> {{object.tipo_pago}}</p>
+    <p><span class="txt_negrita">Producto:</span> <br> {{object.producto.object_list}}</p>
+    <!-- <p><span class="txt_negrita">Imagen:</span> <br> <img src="{% static 'uploads/'%}{{object.img}}" alt="{{object.nombre}}" class="img-fluid"> </p> -->
+    <p><span class="txt_negrita">Total:</span> <br> {{object.total}}</p>
+    <p><span class="txt_negrita">Cliente:</span> <br> {{object.cliente}}</p>
+    
+    <!-- Botón para volver a la vista principal (Home) -->
+    <a href="../" type="submit" class="btn btn-primary">Volver</a>
+    <a href="crear/{{object.id_compra}}" type="submit" class="btn btn-success">Agregar Productos</a>
+    {% endif %}
+{% endblock content %}
