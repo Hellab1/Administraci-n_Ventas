@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Lista Orden{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}  
+    <table id="tabla_detalles" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        {% for detalle in details %}
+            <tr>
+                <td>{{ detalle.producto }}</td>
+                <td>{{ detalle.cantidad }}</td>
+                <td>{{ detalle.total_detalle }}</td>
+                <td>                   
+                    <form method="POST" action="eliminar/{{detalle.id_detalle}}">
+                    {% csrf_token %}
+                    <div class="btn-group">                   
+                        <a href="editar/{{detalle.id_detalle}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
+                        <button class="btn btn-danger" onclick="return eliminar('{{detalle.producto}}');" type="submit">
+                            Eliminar
+                        </button>
+                    </div>
+                    </form>                   
+                </td>
+            </tr>
+            <input type="number" name="id_orden" id="id_orden" value="{{ detalle.orden_venta }}" hidden>
+        {% endfor %}            
+        </tbody>
+    </table> 
+    <script type="text/javascript">
+        function eliminar(nombre) {
+          var x = confirm("Eliminar Producto " + " ?");
+          if (x)
+            return true;
+          else
+            return false;
+        }
+    </script>   
+           
+    <!-- Botón para volver a la vista principal (Home) -->
+    <a id="volver" href="{% url 'leer_ot' %}" type="submit" class="btn btn-primary">Volver</a>
+    <button id="agregarProductos" name="aregarProductos" type="submit" class="btn btn-success">Agregar Productos</button>
+    <!-- <a href="crear/{{object.id_compra}}" type="submit" class="btn btn-success">Agregar Productos</a> -->
+
+    <br><br>
+    <div class="row" id="datos">
+        <div class="form-group col-md-6">
+            <label for="productos">Productos:</label>
+            <select class="form-control" name="producto" id="producto">
+                <option value="0">Seleccionar</option>
+                {% for prod in productos %}
+                    <option value="{{ prod.id_producto }}">{{ prod.nombre_producto }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    
+        <div class="form-group col-md-4">
+            <label for="cantidad">Cantidad:</label>   
+            <input class="form-control" type="number" value="0" name="txt_cantidad" id="txt_cantidad">         
+        </div>
+    </div>
+    <br>
+    <a id="btn_add"  role="button" href="" class="btn btn-success"><span class="btn-label"><i class="fa fa-plus"></i></span>Agregar +</a> 
+    <a id="btn_volver" href="" type="submit" class="btn btn-primary">Volver</a>
+
+    <div class="card-body table-responsive">
+        <table id="tablad" class="table table-bordered table-hover">
+            <thead>
+                <tr>            
+                    <th>Producto</th>    
+                    <th>Cantidad</th>    
+                    <th >Acciones</th>
+                    <!-- <th>Estado</th> -->
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div><!-- /.card-body -->
+
+    <a id="btn_save" role="button" href="" class="btn btn-info">Guardar</a> 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $('#btn_add').hide();
+        $('#tablad').hide();
+        $('#datos').hide();
+        $('#btn_volver').hide();
+        $('#btn_save').hide();
+
+        $('#agregarProductos').click(function(){
+            $('#btn_add').show();
+            $('#tablad').show();
+            $('#datos').show();
+            $('#btn_volver').show();
+            $('#btn_save').show();
+            $('#tabla_detalles').hide();
+            $('#volver').hide();
+            $('#agregarProductos').hide();
+        });
+
+        $('#btn_volver').click(function(){
+            $('#btn_add').hide();
+            $('#tablad').hide();
+            $('#datos').hide();
+            $('#btn_volver').hide();
+            $('#tabla_detalles').show();
+            $('#volver').show();
+            $('#agregarProductos').show();
+        });
+        
+        var lista_productos = new Array;
+        $('#btn_add').click(function(){        
+            const producto = $('#producto option:selected').val();
+            const nombre_producto = $('#producto option:selected').text();
+            const cantidad = $('#txt_cantidad').val();
+            const o_venta = $('#id_orden').val();
+            var length = lista_productos.length;
+            var id_array = (length > 0) ? lista_productos[lista_productos.length - 1].id_array +1 : 1; 
+            console.log('largo: '+length);
+            console.log(id_array);
+            if (nombre_producto == "Seleccionar"){
+                alert("Debe Ingresar un producto ");
+            }else if (cantidad == "" || cantidad == 0){
+                alert("Debe Ingresar una cantidad > 0 ");
+            }else{
+                item = {
+                    id_array : id_array,
+                    producto : producto,
+                    cantidad : cantidad,
+                    orden_venta : o_venta 
+                };  
+                lista_productos.push(item);
+                console.log("lista"+ JSON.stringify(lista_productos) );
+                $('#tablad').append('<tr id="'+id_array+'"><td>'+nombre_producto+'</td><td>'+cantidad+'</td><td><Button type="button" class="btn btn-danger" onclick="eleiminarItem('+id_array+')" >Eliminar</button></td></tr>');
+                $('#txt_cantidad').val('');
+                $("#producto").val(0).change();
+            }        
+        });
+        function eleiminarItem(id){
+            var helper = {
+                removeOne: function(array, predicate) {
+                    for (var i = 0; i < array.length; i++) {
+                        if (predicate(array[i])) {
+                            return array.splice(i, 1);
+                        }
+                    }
+                },
+                remove: function(array, predicate) {
+                    var removed = [];
+                    for (var i = 0; i < array.length;) {
+                        if (predicate(array[i])) {
+                            removed.push(array.splice(i, 1));
+                            continue;
+                        }
+                        i++;
+                    }
+                    return removed;
+                }
+            };
+            var removed = helper.removeOne(lista_productos, row => row.id_array === id);
+            $('#tablad').find('tr[id="'+id+'"]').remove();              
+        }
+    </script>
+    {% endif %}
+{% endblock content %}

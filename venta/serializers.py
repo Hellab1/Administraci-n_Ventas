@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework import fields
 from rest_framework.fields import ReadOnlyField
-from .models import Orden_Compra
+from .models import Detalle_Venta, Orden_Compra, Producto
 
 class ventaSerializer(serializers.ModelSerializer):
     cliente_name = serializers.ReadOnlyField(source='cliente.nombre_cliente', read_only=True)
@@ -15,9 +16,20 @@ class ventaSerializer(serializers.ModelSerializer):
         fields = ('id_compra', 'num_pedido', 'fecha_compra', 'cliente_rut', 'cliente_name', 'cliente_direccion', 'cliente_comuna',
         'cliente_region', 'detalle', 'neto', 'iva', 'total', 'tipo_pago', 'forma_pago', 'tipo_facturacion')
 
+class productoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = ('nombre_producto')
+
+class ordenDetalleSerializer(serializers.ModelSerializer):
+    productos = productoSerializer(many=True, read_only=True)
+    class Meta:
+        model = Detalle_Venta
+        fields = ('productos')
+
 class detallesSerializer(serializers.ModelSerializer):
-    cliente_name = serializers.ReadOnlyField(source='cliente.nombre_cliemte', read_only=True)
-    productos = serializers.StringRelatedField(many=True)
+    cliente_name = serializers.ReadOnlyField(source='cliente.nombre_cliente', read_only=True)
+    productos = ordenDetalleSerializer(many=True, read_only=True)
     class Meta:
         model = Orden_Compra
-        fields = ('id_compra', 'num_pedido', 'tipo_pago', 'productos', 'cliente_name')
+        fields = ('cliente_name', 'id_compra', 'num_pedido', 'tipo_pago', 'productos')

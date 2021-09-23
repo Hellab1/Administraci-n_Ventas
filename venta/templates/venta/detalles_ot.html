@@ -14,13 +14,42 @@
     {% if user.is_authenticated %}        
     <h4>Detalles</h4>
     
-    <p><span class="txt_negrita">ID Compra:</span> <br> {{object.id_compra}}</p>
+    <!-- <p><span class="txt_negrita">ID Compra:</span> <br> {{object.id_compra}}</p>
     <p><span class="txt_negrita">Número de Pedido:</span> <br> {{object.num_pedido}}</p>
     <p><span class="txt_negrita">Tipo de pago:</span> <br> {{object.tipo_pago}}</p>
     <p><span class="txt_negrita">Producto:</span> <br> {{object.producto.object_list}}</p>
-    <!-- <p><span class="txt_negrita">Imagen:</span> <br> <img src="{% static 'uploads/'%}{{object.img}}" alt="{{object.nombre}}" class="img-fluid"> </p> -->
+    <p><span class="txt_negrita">Imagen:</span> <br> <img src="{% static 'uploads/'%}{{object.img}}" alt="{{object.nombre}}" class="img-fluid"> </p>
     <p><span class="txt_negrita">Total:</span> <br> {{object.total}}</p>
-    <p><span class="txt_negrita">Cliente:</span> <br> {{object.cliente}}</p>
+    <p><span class="txt_negrita">Cliente:</span> <br> {{object.cliente}}</p> -->
+
+    <div class="container">
+        <div class="start-template">
+            <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                    <i class="fa fa-trash"></i> Eliminar
+                </button>
+            </div>
+          <table id="tabla" data-toggle="table"
+            data-classes="table table-hover table-condensed"
+            data-row-style="rowStyle"
+            data-show-toggle="true"
+            data-sort-name="titulo"
+            data-pagination="true"
+            data-page-list="[10, 25, 50, 100, all]"
+            data-url="{% url 'detalles_list' %}">
+              <thead>
+                <tr>
+                  <th data-field="num_pedido" data-sortable="true">Número de pedido</th>
+                  <th data-field="cliente_name">Cliente</th>
+                  <th data-field="fecha_compra">Fecha de Compra</th>
+                  <th data-field="detalle">Detalle</th>
+                  <th data-field="iva">IVA</th>
+                  <th data-field="total">Total</th>
+                </tr>
+              </thead>
+           </table>
+        </div>
+      </div>
     
     <!-- Botón para volver a la vista principal (Home) -->
     <a href="../" type="submit" class="btn btn-primary">Volver</a>

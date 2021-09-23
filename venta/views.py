@@ -1,3 +1,4 @@
+from django.http.response import Http404
 from django.shortcuts import render
 # Instanciamos las vistas genéricas de Django 
 from django.views.generic import ListView, DetailView 
@@ -15,7 +16,7 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework import generics
-from .serializers import ventaSerializer
+from .serializers import detallesSerializer, ventaSerializer
 
 # Create your views here.
 class ClienteListado(LoginRequiredMixin, ListView): 
@@ -100,11 +101,11 @@ class OTCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     login_url = '/iniciar-sesion/'
     def get_success_url(self):        
         return reverse('leer_ot') 
-
+"""
 class OTDetalle(LoginRequiredMixin, DetailView): 
     model = Orden_Compra
     login_url = '/iniciar-sesion/'
-
+"""
 class OTActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
     model = Orden_Compra 
     form = Orden_Compra
@@ -137,6 +138,15 @@ class ventasList(generics.ListAPIView):
     queryset = Orden_Compra.objects.all()
     serializer_class = ventaSerializer
 
-def crear_detalle(request):
-      parametro = request.GET.get("parametro","")
+class detallesList(generics.ListAPIView):
+    queryset = Orden_Compra.objects.all()
+    serializer_class = detallesSerializer
+
+
+def pregunta(request, pk):
+    productos = Producto.objects.all()
+    details = Detalle_Venta.objects.filter(orden_venta=pk)
+    return render(request, "venta/detalles_venta.html", {'details':details, 'productos':productos})
+
+    
 

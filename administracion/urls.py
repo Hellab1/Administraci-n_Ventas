@@ -41,12 +41,15 @@ urlpatterns = [
     path('producto/editar/<int:pk>', ProductoActualizar.as_view(template_name = "venta/actualizar_producto.html"), name='actualizar_producto'), 
     path('producto/eliminar/<int:pk>', ProductoEliminar.as_view(), name='eliminar_producto'), 
     path('ot/', OTListado.as_view(template_name = "venta/index_ot.html"), name='leer_ot'), 
-    path('ot/detalle/<int:pk>', OTDetalle.as_view(template_name = "venta/detalles_ot.html"), name='detalles_ot'),
+    #path('ot/detalle/<int:pk>', OTDetalle.as_view(template_name = "venta/detalles_ot.html"), name='detalles_ot'),
     path('ot/crear', OTCrear.as_view(template_name = "venta/crear_ot.html"), name='crear_ot'), 
     path('ot/editar/<int:pk>', OTActualizar.as_view(template_name = "venta/actualizar_ot.html"), name='actualizar_ot'), 
     path('ot/eliminar/<int:pk>', OTEliminar.as_view(), name='eliminar_ot'),
     url(r'^api/$', ventasList.as_view(), name='ventas_list'),
+    url(r'^api_detalles/$', detallesList.as_view(), name='detalles_list'),
     url(r'^ventas/$',TemplateView.as_view(template_name="venta/index_venta.html")),
+    url(r'^detalles/$',TemplateView.as_view(template_name="venta/detalles_ot.html")),
     path('ot/detalle/crear/<int:num>', DetalleCrear.as_view(template_name = "venta/crear_detalle.html"), name='crear_detalle'), 
-    #/crear_libro/?usuario=<id_usuario>
+    path('ot/detalle/<int:pk>/', pregunta, name="detalles"),
 ]
+#path('test/<srt:modalidad>', pregunta_views.pregunta, name="test")
