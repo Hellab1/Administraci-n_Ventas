@@ -93,6 +93,7 @@ class OTListado(LoginRequiredMixin, ListView):
     model = Orden_Compra
     login_url = '/iniciar-sesion/'
 
+"""
 class OTCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView): 
     model = Orden_Compra
     form = Orden_Compra
@@ -101,11 +102,24 @@ class OTCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     login_url = '/iniciar-sesion/'
     def get_success_url(self):        
         return reverse('leer_ot') 
-"""
+
 class OTDetalle(LoginRequiredMixin, DetailView): 
     model = Orden_Compra
     login_url = '/iniciar-sesion/'
 """
+from django.shortcuts import redirect
+from .forms import OrdenForm
+def OTCrear(request):
+    if request.method == "POST":
+        form = OrdenForm(request.POST)
+        if form.is_valid():
+            orden = form.save(commit=False)
+            orden.save()
+            return redirect('detalles', pk=orden.id_compra)
+    else:
+        form = OrdenForm()
+    return render(request, 'venta/crear_ot.html', {'form': form})
+
 class OTActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
     model = Orden_Compra 
     form = Orden_Compra
@@ -147,6 +161,12 @@ def pregunta(request, pk):
     productos = Producto.objects.all()
     details = Detalle_Venta.objects.filter(orden_venta=pk)
     return render(request, "venta/detalles_venta.html", {'details':details, 'productos':productos})
+
+def facturas(request):
+    #ventas = Orden_Compra.objects.all()
+    ventas = Orden_Compra.objects.raw("SELECT oc.id_compra AS ID, oc.num_pedido AS 'N° Pedido', oc.fecha_compra AS Fecha, c.rut_cliente AS RUT, c.nombre_cliente AS Nombre, CONCAT(c.direccion, ', ', c.comuna, ', ', c.region) AS Direccion, GROUP_CONCAT(IF(p.tipo=1, 'Lijado', 'No Lijado')) AS Tipo, GROUP_CONCAT(p.nombre_producto) AS Descripción, v.cantidad AS Cantidad, SUM(v.total_detalle) AS 'Precio Neto', ROUND(SUM(v.total_detalle)*0.19) AS IVA, oc.total Total, oc.tipo_pago AS 'Tipo de Pago', oc.forma_pago AS 'Forma de Pago', oc.tipo_facturacion AS 'Tipo de Facturacion' FROM venta_orden_compra oc JOIN venta_cliente c ON oc.cliente_id = c.id_cliente JOIN venta_detalle_venta v ON oc.id_compra = v.orden_venta_id JOIN venta_producto p ON v.producto_id = p.id_producto GROUP BY oc.id_compra")[:]
+    return render(request, "venta/prueba.html", {'ventas':ventas})
+
 
     
 

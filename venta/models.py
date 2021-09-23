@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import CharField, IntegerField
 
 # Create your models here.
     
@@ -30,9 +31,6 @@ class Orden_Compra(models.Model):
     tipo_pago = models.CharField(max_length=50)
     forma_pago = models.CharField(max_length=30)
     tipo_facturacion = models.CharField(max_length=50)
-    neto = models.IntegerField()
-    iva = models.IntegerField()
-    total = models.IntegerField()
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     def __str__(self):
         return str(self.num_pedido)
@@ -45,3 +43,23 @@ class Detalle_Venta(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     def __str__(self):
         return self.producto.nombre_producto + ' ' + str(self.producto.espesor) + 'mm'
+
+class Factura(models.Model):
+    id_factura = models.AutoField(primary_key=True)
+    codigo = models.IntegerField()
+    n_pedido = models.IntegerField()
+    fecha = models.DateField()
+    rut = models.CharField(max_length=12)
+    nombre = models.CharField(max_length=60)
+    direccion = models.CharField(max_length=234)
+    tipo = models.CharField(max_length=120, blank=True)
+    descripcion_productos = models.CharField(max_length=1000, blank=True)
+    cantidad = models.IntegerField(blank=True)
+    paquete = models.CharField(max_length=50, blank=True)
+    piezas_paquete = models.IntegerField(blank=True)
+    neto = models.IntegerField(blank=True)
+    iva = models.IntegerField(blank=True)
+    total = models.IntegerField(blank=True)
+    tipo_pago = models.CharField(max_length=50, blank=True)
+    forma_pago = models.CharField(max_length=30, blank=True)
+    tipo_facturacion = models.CharField(max_length=50, blank=True)
