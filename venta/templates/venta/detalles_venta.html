@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% load static %}
 {% block title %}Lista Orden{% endblock %}
 {% block header %}
@@ -18,7 +19,7 @@
                 <th>Producto</th>
                 <th>Cantidad</th>
                 <th>Total</th>
-                <th>Acciones</th>
+                <!-- <th>Acciones</th> -->
             </tr>
         </thead>
         <tbody>
@@ -31,12 +32,12 @@
                 <td>                   
                     <form method="POST" action="eliminar/{{detalle.id_detalle}}">
                     {% csrf_token %}
-                    <div class="btn-group">                   
+                    <!-- <div class="btn-group">                   
                         <a href="editar/{{detalle.id_detalle}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
                         <button class="btn btn-danger" onclick="return eliminar('{{detalle.producto}}');" type="submit">
                             Eliminar
                         </button>
-                    </div>
+                    </div> -->
                     </form>                   
                 </td>
             </tr>
@@ -44,6 +45,10 @@
         {% endfor %}            
         </tbody>
     </table> 
+    <!-- Botón para volver a la vista principal (Home) -->
+    <a id="volver" href="{% url 'leer_ot' %}" type="submit" class="btn btn-info">Volver</a>
+    <!-- <a id="Finalizar" href="{% url 'crear_factura' %}" type="submit" class="btn btn-dark">---Finalizar---</a> -->
+
     <script type="text/javascript">
         function eliminar(nombre) {
           var x = confirm("Eliminar Producto " + " ?");
@@ -52,53 +57,52 @@
           else
             return false;
         }
-    </script>   
-           
+    </script>    
+    <br>
+    <form method="post" enctype="multipart/form-data">  
+        {% csrf_token %}
+            <div class="mb-3">
+                <label for="producto" class="form-label">Producto</label>
+                {{ form.producto|add_class:"form-select" }} 
+            </div>
+            <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad</label>
+                {{ form.cantidad|add_class:"form-control" }} 
+            </div>
+            <br>
+            <button id="btnCrear" name="btnCrear" type="submit" class="btn btn-success">Agregar Productos</button>
+
+            <input type="number" value="0" name="id_orden_compra" id="id_orden_compra" hidden>
+            <button id="btnFinalizar" name="btnFinalizar" type="submit" class="btn btn-dark">Finalizar</button>
+        </div>
+    </form>
     <!-- Botón para volver a la vista principal (Home) -->
     <a id="volver" href="{% url 'leer_ot' %}" type="submit" class="btn btn-primary">Volver</a>
-    <button id="agregarProductos" name="aregarProductos" type="submit" class="btn btn-success">Agregar Productos</button>
+    <a id="Finalizar" href="{% url 'leer_ot' %}" type="submit" class="btn btn-danger">Finalizar</a>
+
     <!-- <a href="crear/{{object.id_compra}}" type="submit" class="btn btn-success">Agregar Productos</a> -->
 
-    <br><br>
-    <div class="row" id="datos">
-        <div class="form-group col-md-6">
-            <label for="productos">Productos:</label>
-            <select class="form-control" name="producto" id="producto">
-                <option value="0">Seleccionar</option>
-                {% for prod in productos %}
-                    <option value="{{ prod.id_producto }}">{{ prod.nombre_producto }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    
-        <div class="form-group col-md-4">
-            <label for="cantidad">Cantidad:</label>   
-            <input class="form-control" type="number" value="0" name="txt_cantidad" id="txt_cantidad">         
-        </div>
-    </div>
-    <br>
-    <a id="btn_add"  role="button" href="" class="btn btn-success"><span class="btn-label"><i class="fa fa-plus"></i></span>Agregar +</a> 
-    <a id="btn_volver" href="" type="submit" class="btn btn-primary">Volver</a>
+    <!-- <a id="btn_add"  role="button" class="btn btn-success"><span class="btn-label"><i class="fa fa-plus"></i></span>Agregar +</a> 
+    <a id="btn_volver" href="" type="submit" class="btn btn-primary">Volver</a> -->
 
-    <div class="card-body table-responsive">
+    <!-- <div class="card-body table-responsive">
         <table id="tablad" class="table table-bordered table-hover">
             <thead>
                 <tr>            
                     <th>Producto</th>    
                     <th>Cantidad</th>    
                     <th >Acciones</th>
-                    <!-- <th>Estado</th> -->
                 </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
-    </div><!-- /.card-body -->
+    </div> -->
 
-    <a id="btn_save" role="button" href="" class="btn btn-info">Guardar</a> 
+    <!-- <a id="btn_save" role="button" href="" class="btn btn-info">Guardar</a>  -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         $('#btn_add').hide();
         $('#tablad').hide();
         $('#datos').hide();
@@ -178,6 +182,6 @@
             var removed = helper.removeOne(lista_productos, row => row.id_array === id);
             $('#tablad').find('tr[id="'+id+'"]').remove();              
         }
-    </script>
+    </script> -->
     {% endif %}
 {% endblock content %}

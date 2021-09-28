@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url,include
 from django.urls import path
+# from django.urls.conf import re_path
 from django.views.generic.base import TemplateView
 from perfiles.views import SignUpView, BienvenidaView, SignInView, SignOutView
 from venta.views import *
@@ -49,8 +50,10 @@ urlpatterns = [
     url(r'^api_detalles/$', detallesList.as_view(), name='detalles_list'),
     url(r'^ventas/$',TemplateView.as_view(template_name="venta/index_venta.html")),
     url(r'^detalles/$',TemplateView.as_view(template_name="venta/detalles_ot.html")),
-    path('ot/detalle/crear/<int:num>', DetalleCrear.as_view(template_name = "venta/crear_detalle.html"), name='crear_detalle'), 
-    path('ot/detalle/<int:pk>/', pregunta, name="detalles"),
-    path('prueba/', facturas, name="facturas"),
+    #path('ot/detalle/crear/<int:num>', DetalleCrear.as_view(template_name = "venta/crear_detalle.html"), name='crear_detalle'), 
+    path('ot/detalle/<int:pk>/', detallesCrearVenta, name="detalles"),
+    path('inicio/', indexFactura.as_view(template_name = "venta/facturas.html"), name='lista_factura'), 
+    path('inicio/facturacion/', crearFactura, name='crear_factura'), 
+    # re_path(r'^facturacion/(?P<pk>[0-9])/$', crearFactura, name='crear_factura'),
 ]
 #path('test/<srt:modalidad>', pregunta_views.pregunta, name="test")

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # Instanciamos los modelos para poder usarlo en nuestras Vistas CRUD
-from .models import Cliente, Detalle_Venta, Producto, Orden_Compra
+from .models import Cliente, Detalle_Venta, Factura, Producto, Orden_Compra
 # Nos sirve para redireccionar despues de una acción revertiendo patrones de expresiones regulares 
 from django.urls import reverse 
 # Habilitamos el uso de mensajes en Django
@@ -107,18 +107,6 @@ class OTDetalle(LoginRequiredMixin, DetailView):
     model = Orden_Compra
     login_url = '/iniciar-sesion/'
 """
-from django.shortcuts import redirect
-from .forms import OrdenForm
-def OTCrear(request):
-    if request.method == "POST":
-        form = OrdenForm(request.POST)
-        if form.is_valid():
-            orden = form.save(commit=False)
-            orden.save()
-            return redirect('detalles', pk=orden.id_compra)
-    else:
-        form = OrdenForm()
-    return render(request, 'venta/crear_ot.html', {'form': form})
 
 class OTActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
     model = Orden_Compra 
@@ -156,17 +144,55 @@ class detallesList(generics.ListAPIView):
     queryset = Orden_Compra.objects.all()
     serializer_class = detallesSerializer
 
-
-def pregunta(request, pk):
-    productos = Producto.objects.all()
+def detallesCrearVenta(request, pk):
     details = Detalle_Venta.objects.filter(orden_venta=pk)
-    return render(request, "venta/detalles_venta.html", {'details':details, 'productos':productos})
+    id = pk
+    orden = Orden_Compra.objects.get(id_compra=pk)
+    if request.method == "POST" and 'btnCrear' in request.POST:
+        form = DetalleForm(request.POST)
+        if form.is_valid():
+            detalle = form.save(commit=False)
+            detalle.orden_venta = orden
+            detalle.total_detalle = 0
+            detalle.save()
+            return redirect('detalles', id)
+    if request.method=='POST' and 'btnFinalizar' in request.POST:
+        form = crearForm(request.POST)
+        if form.is_valid():
+            detalle = form.save(commit=False)
+            detalle.id_orden_compra = id
+            detalle.save()
+            return redirect('lista_factura')
+    else:
+        form = DetalleForm()
+    return render(request, 'venta/detalles_venta.html', {'form': form, 'details':details, 'orden':orden})
 
-def facturas(request):
-    #ventas = Orden_Compra.objects.all()
-    ventas = Orden_Compra.objects.raw("SELECT oc.id_compra AS ID, oc.num_pedido AS 'N° Pedido', oc.fecha_compra AS Fecha, c.rut_cliente AS RUT, c.nombre_cliente AS Nombre, CONCAT(c.direccion, ', ', c.comuna, ', ', c.region) AS Direccion, GROUP_CONCAT(IF(p.tipo=1, 'Lijado', 'No Lijado')) AS Tipo, GROUP_CONCAT(p.nombre_producto) AS Descripción, v.cantidad AS Cantidad, SUM(v.total_detalle) AS 'Precio Neto', ROUND(SUM(v.total_detalle)*0.19) AS IVA, oc.total Total, oc.tipo_pago AS 'Tipo de Pago', oc.forma_pago AS 'Forma de Pago', oc.tipo_facturacion AS 'Tipo de Facturacion' FROM venta_orden_compra oc JOIN venta_cliente c ON oc.cliente_id = c.id_cliente JOIN venta_detalle_venta v ON oc.id_compra = v.orden_venta_id JOIN venta_producto p ON v.producto_id = p.id_producto GROUP BY oc.id_compra")[:]
-    return render(request, "venta/prueba.html", {'ventas':ventas})
+from django.shortcuts import redirect
+from .forms import DetalleForm, OrdenForm, crearForm
+def OTCrear(request):    
+    if request.method == "POST":
+        form = OrdenForm(request.POST)
+        if form.is_valid():            
+            orden = form.save(commit=False)
+            orden.save()
+            return redirect('detalles', pk=orden.id_compra)
+    else:
+        form = OrdenForm()
+    return render(request, 'venta/crear_ot.html', {'form': form})    
+
+class indexFactura(LoginRequiredMixin, ListView): 
+    model = Factura
+    login_url = '/iniciar-sesion/'
 
 
-    
-
+def crearFactura(request, id):
+    if request.method == "POST":
+        form = crearForm(request.POST)
+        if form.is_valid():
+            detalle = form.save(commit=False)
+            detalle.id_orden_compra = id
+            detalle.save()
+            return redirect('lista_factura')
+    else:
+        form = DetalleForm()
+    return render(request, 'venta/continuar_factura.html', {'form': form})

@@ -41,8 +41,7 @@ class Detalle_Venta(models.Model):
     total_detalle = models.IntegerField()
     orden_venta = models.ForeignKey(Orden_Compra, related_name='detalle', on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.producto.nombre_producto + ' ' + str(self.producto.espesor) + 'mm'
+   
 
 class Factura(models.Model):
     id_factura = models.AutoField(primary_key=True)
@@ -52,14 +51,17 @@ class Factura(models.Model):
     rut = models.CharField(max_length=12)
     nombre = models.CharField(max_length=60)
     direccion = models.CharField(max_length=234)
-    tipo = models.CharField(max_length=120, blank=True)
-    descripcion_productos = models.CharField(max_length=1000, blank=True)
-    cantidad = models.IntegerField(blank=True)
-    paquete = models.CharField(max_length=50, blank=True)
-    piezas_paquete = models.IntegerField(blank=True)
-    neto = models.IntegerField(blank=True)
-    iva = models.IntegerField(blank=True)
-    total = models.IntegerField(blank=True)
-    tipo_pago = models.CharField(max_length=50, blank=True)
-    forma_pago = models.CharField(max_length=30, blank=True)
-    tipo_facturacion = models.CharField(max_length=50, blank=True)
+    tipo = models.CharField(max_length=120, null=True)
+    descripcion_productos = models.CharField(max_length=1000, null=True)
+    cantidad = models.IntegerField(null=True)
+    paquete = models.CharField(max_length=50, null=True)
+    piezas_paquete = models.IntegerField(null=True)
+    neto = models.IntegerField(null=True)
+    iva = models.IntegerField(null=True)
+    total = models.IntegerField(null=True)
+    tipo_pago = models.CharField(max_length=50, null=True)
+    forma_pago = models.CharField(max_length=30, null=True)
+    tipo_facturacion = models.CharField(max_length=50, null=True)
+
+class Crear_Factura(models.Model):
+    id_orden_compra = models.IntegerField()

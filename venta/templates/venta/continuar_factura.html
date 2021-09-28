@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Crear Orden{% endblock %}
+{% block header %}
+    {% if user.is_authenticated %}
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap">
+                <a class="nav-link px-3" href="{% url 'sign_out' %}">Cerrar sesión</a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock header%}
+{% block content %}
+    {% if user.is_authenticated %}                          
+        <form method="post" enctype="multipart/form-data">  
+            {% csrf_token %}   
+            <br>                 
+            <input type="number" value="0" name="id_orden_compra" id="id_orden_compra" hidden>
+            <br>          
+            <button type="submit" class="btn btn-primary">Continuar</button>                 
+        </form>
+    {% endif %}
+{% endblock content %}
