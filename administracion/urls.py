@@ -23,7 +23,7 @@ from venta.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', BienvenidaView.as_view(), name='bienvenida'),
+    # url(r'^$', BienvenidaView.as_view(), name='bienvenida'),
     url(r'^registrate/$', SignUpView.as_view(), name='sign_up'),
     url(r'^iniciar-sesion/$', SignInView.as_view(), name='sign_in'),
     url(r'^cerrar-sesion/$', SignOutView.as_view(), name='sign_out'),
@@ -52,7 +52,7 @@ urlpatterns = [
     url(r'^detalles/$',TemplateView.as_view(template_name="venta/detalles_ot.html")),
     #path('ot/detalle/crear/<int:num>', DetalleCrear.as_view(template_name = "venta/crear_detalle.html"), name='crear_detalle'), 
     path('ot/detalle/<int:pk>/', detallesCrearVenta, name="detalles"),
-    path('inicio/', indexFactura.as_view(template_name = "venta/facturas.html"), name='lista_factura'), 
+    path('', indexFactura.as_view(template_name = "venta/facturas.html"), name='bienvenida'), 
     path('inicio/facturacion/', crearFactura, name='crear_factura'), 
     # re_path(r'^facturacion/(?P<pk>[0-9])/$', crearFactura, name='crear_factura'),
 ]
