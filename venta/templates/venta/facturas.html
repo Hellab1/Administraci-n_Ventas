@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% load static %}
 {% block title %}Lista Clientes{% endblock %}
 {% block header %}
@@ -31,16 +32,16 @@
             <!-- Recorremos los objetos o registros que tenemos en nuestra tabla 'cliente' y los listamos -->
             {% for factura in object_list %}
                 <tr>
-                <td>{{ factura.codigo }}</td>
+                <td>{{ factura.codigo|intcomma }}</td>
                 <td>{{ factura.n_pedido }}</td>
                 <td>{{ factura.fecha }}</td>
                 <td>{{ factura.rut }}</td>
                 <td>{{ factura.nombre }}</td>
-                <td>{{ factura.cantidad }}</td>
+                <td>{{ factura.cantidad|intcomma }}</td>
                 <td>{{ factura.paquete }}</td>
-                <td>{{ factura.neto }}</td>
-                <td>{{ factura.iva }}</td>
-                <td>{{ factura.total }}</td>                
+                <td>${{ factura.neto|intcomma }}</td>
+                <td>${{ factura.iva|intcomma }}</td>
+                <td>${{ factura.total|intcomma }}</td>                
                 </tr>
             {% endfor %}                       
             </tbody>
