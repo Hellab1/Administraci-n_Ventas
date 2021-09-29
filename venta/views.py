@@ -92,6 +92,7 @@ class ProductoEliminar(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 class OTListado(LoginRequiredMixin, ListView): 
     model = Orden_Compra
     login_url = '/iniciar-sesion/'
+    paginate_by = 10
 
 """
 class OTCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView): 
