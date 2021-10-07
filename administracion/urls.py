@@ -55,5 +55,9 @@ urlpatterns = [
     path('', indexFactura.as_view(template_name = "venta/facturas.html"), name='bienvenida'), 
     path('inicio/facturacion/', crearFactura, name='crear_factura'), 
     # re_path(r'^facturacion/(?P<pk>[0-9])/$', crearFactura, name='crear_factura'),
+    url(r'^reporte_facturas_excel/$',ReporteFacturasExcel.as_view(), name="reporte_facturas_excel"),
 ]
 #path('test/<srt:modalidad>', pregunta_views.pregunta, name="test")
+
+# from django.conf.urls import handler404 
+handler404 = pag_404_not_found

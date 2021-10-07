@@ -12,6 +12,7 @@
 {% endblock header%}
 {% block content %}
     {% if user.is_authenticated %} 
+    <br>
         <table class="table table-striped table-hover" id="clientes">
             <thead>
                 <tr>
@@ -59,3 +60,29 @@
     </script>
     {% endif %}
 {% endblock content %}
+{% block js %}
+<script>
+$(document).ready(function() 
+{   
+    var table = $('#clientes').DataTable( {
+        "language": {
+            url: "/static/localizacion/es_ES.json"
+        }
+    } );
+  
+    $('#clientes tbody').on( 'click', 'tr', function() 
+    {
+        if ($(this).hasClass('selected') ) 
+        {           
+            $(this).removeClass('selected');
+             
+        }
+        else 
+        {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');                      
+        }
+    });        
+});
+</script>
+{% endblock js %}

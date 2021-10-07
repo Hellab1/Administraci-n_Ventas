@@ -69,6 +69,10 @@
                 <label for="cantidad" class="form-label">Cantidad</label>
                 {{ form.cantidad|add_class:"form-control" }} 
             </div>
+            <div class="mb-3">
+                <label for="num_paquete" class="form-label">N° de Paquete</label>
+                {{ form.num_paquete|add_class:"form-control" }} 
+            </div>
             <br>
             <button id="btnCrear" name="btnCrear" type="submit" class="btn btn-success">Agregar Productos</button>
 
@@ -76,9 +80,6 @@
             <button id="btnFinalizar" name="btnFinalizar" type="submit" class="btn btn-dark">Finalizar</button>
         </div>
     </form>
-    <!-- Botón para volver a la vista principal (Home) -->
-    <a id="volver" href="{% url 'leer_ot' %}" type="submit" class="btn btn-primary">Volver</a>
-    <a id="Finalizar" href="{% url 'leer_ot' %}" type="submit" class="btn btn-danger">Finalizar</a>
 
     <!-- <a href="crear/{{object.id_compra}}" type="submit" class="btn btn-success">Agregar Productos</a> -->
 

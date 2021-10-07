@@ -12,7 +12,7 @@ class DetalleForm(forms.ModelForm):
 
     class Meta:
         model = Detalle_Venta
-        fields = ('id_detalle', 'cantidad', 'producto')
+        fields = ('id_detalle', 'cantidad', 'producto', 'num_paquete')
 
 class crearForm(forms.ModelForm):
 

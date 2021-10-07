@@ -39,6 +39,8 @@ class Detalle_Venta(models.Model):
     id_detalle = models.AutoField(primary_key=True)
     cantidad = models.IntegerField()
     total_detalle = models.IntegerField()
+    paquetes = models.FloatField()
+    num_paquete = models.CharField(max_length=45)
     orden_venta = models.ForeignKey(Orden_Compra, related_name='detalle', on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
    
