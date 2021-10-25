@@ -29,17 +29,6 @@
                 <td>{{ detalle.producto }}</td>
                 <td>{{ detalle.cantidad }}</td>
                 <td>{{ detalle.total_detalle }}</td>
-                <td>                   
-                    <form method="POST" action="eliminar/{{detalle.id_detalle}}">
-                    {% csrf_token %}
-                    <!-- <div class="btn-group">                   
-                        <a href="editar/{{detalle.id_detalle}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
-                        <button class="btn btn-danger" onclick="return eliminar('{{detalle.producto}}');" type="submit">
-                            Eliminar
-                        </button>
-                    </div> -->
-                    </form>                   
-                </td>
             </tr>
             <input type="number" name="id_orden" id="id_orden" value="{{ detalle.orden_venta }}" hidden>
         {% endfor %}            
@@ -47,7 +36,6 @@
     </table> 
     <!-- Botón para volver a la vista principal (Home) -->
     <a id="volver" href="{% url 'leer_ot' %}" type="submit" class="btn btn-info">Volver</a>
-    <!-- <a id="Finalizar" href="{% url 'crear_factura' %}" type="submit" class="btn btn-dark">---Finalizar---</a> -->
 
     <script type="text/javascript">
         function eliminar(nombre) {

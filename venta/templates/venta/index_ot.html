@@ -26,15 +26,15 @@
             
             {% for orden_compra in object_list %}
                 <tr>
-                    <td>{{ orden_compra.fecha_compra }}</td>
+                    <td>{{ orden_compra.fecha }}</td>
                     <td>{{ orden_compra.tipo_pago }}</td>
                     <td>{{ orden_compra.cliente }}</td> 
                     <td>                   
                         <form method="POST" action="eliminar/{{orden_compra.id_compra}}">
                             {% csrf_token %}
                             <div class="btn-group"> 
-                                <a href="detalle/{{orden_compra.id_compra}}" title="Detalles" type="button" class="btn btn-success">Detalles </a>                  
-                                <a href="editar/{{orden_compra.id_compra}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
+                                <a href="detalle/{{orden_compra.id_factura}}" title="Detalles" type="button" class="btn btn-success">Detalles </a>                  
+                                <a href="editar/{{orden_compra.id_factura}}" title="Editar" type="button" class="btn btn-primary">Editar </a>
                                 <button class="btn btn-danger" onclick="return eliminar();" type="submit">
                                     Eliminar
                                 </button>

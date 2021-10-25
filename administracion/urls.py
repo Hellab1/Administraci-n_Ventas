@@ -43,7 +43,7 @@ urlpatterns = [
     path('producto/eliminar/<int:pk>', ProductoEliminar.as_view(), name='eliminar_producto'), 
     path('ot/', OTListado.as_view(template_name = "venta/index_ot.html"), name='leer_ot'), 
     #path('ot/detalle/<int:pk>', OTDetalle.as_view(template_name = "venta/detalles_ot.html"), name='detalles_ot'),
-    path('ot/crear', OTCrear, name='crear_ot'), 
+    path('ot/crear', facturaCrear, name='crear_ot'), 
     path('ot/editar/<int:pk>', OTActualizar.as_view(template_name = "venta/actualizar_ot.html"), name='actualizar_ot'), 
     path('ot/eliminar/<int:pk>', OTEliminar.as_view(), name='eliminar_ot'),
     url(r'^api/$', ventasList.as_view(), name='ventas_list'),
@@ -53,7 +53,6 @@ urlpatterns = [
     #path('ot/detalle/crear/<int:num>', DetalleCrear.as_view(template_name = "venta/crear_detalle.html"), name='crear_detalle'), 
     path('ot/detalle/<int:pk>/', detallesCrearVenta, name="detalles"),
     path('', indexFactura.as_view(template_name = "venta/facturas.html"), name='bienvenida'), 
-    path('inicio/facturacion/', crearFactura, name='crear_factura'), 
     # re_path(r'^facturacion/(?P<pk>[0-9])/$', crearFactura, name='crear_factura'),
     url(r'^reporte_facturas_excel/$',ReporteFacturasExcel.as_view(), name="reporte_facturas_excel"),
 ]

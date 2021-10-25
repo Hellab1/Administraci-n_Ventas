@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # Instanciamos los modelos para poder usarlo en nuestras Vistas CRUD
-from .models import Cliente, Detalle_Venta, Factura, Producto, Orden_Compra
+from .models import Cliente, Detalle_Venta, Factura, Producto, Factura
 # Nos sirve para redireccionar despues de una acción revertiendo patrones de expresiones regulares 
 from django.urls import reverse 
 # Habilitamos el uso de mensajes en Django
@@ -19,7 +19,7 @@ from rest_framework import generics
 from .serializers import detallesSerializer, ventaSerializer
 
 from django.shortcuts import redirect
-from .forms import DetalleForm, OrdenForm, crearForm
+from .forms import *
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -94,7 +94,7 @@ class ProductoEliminar(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return reverse('leer_producto') 
 
 class OTListado(LoginRequiredMixin, ListView): 
-    model = Orden_Compra
+    model = Factura
     login_url = '/iniciar-sesion/'
 
 """
@@ -113,8 +113,8 @@ class OTDetalle(LoginRequiredMixin, DetailView):
 """
 
 class OTActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView): 
-    model = Orden_Compra 
-    form = Orden_Compra
+    model = Factura 
+    form = Factura
     fields = "__all__"
     success_message = 'Orden de Compra Actualizada Correctamente !' 
     login_url = '/iniciar-sesion/'
@@ -122,8 +122,8 @@ class OTActualizar(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('leer_ot') 
 
 class OTEliminar(LoginRequiredMixin, SuccessMessageMixin, DeleteView): 
-    model = Orden_Compra 
-    form = Orden_Compra
+    model = Factura 
+    form = Factura
     fields = "__all__"   
     login_url = '/iniciar-sesion/' 
     def get_success_url(self): 
@@ -131,76 +131,64 @@ class OTEliminar(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         messages.success (self.request, (success_message))       
         return reverse('leer_ot') 
 
-class DetalleCrear(LoginRequiredMixin, SuccessMessageMixin, CreateView): 
-    model = Detalle_Venta
-    form = Detalle_Venta
-    fields = "__all__" 
-    success_message = 'Detalle Creado Correctamente !' 
-    login_url = '/iniciar-sesion/'
-    def get_success_url(self):        
-        return reverse('leer_ot') 
-
 class ventasList(generics.ListAPIView):
-    queryset = Orden_Compra.objects.all()
+    queryset = Factura.objects.all()
     serializer_class = ventaSerializer
 
 class detallesList(generics.ListAPIView):
-    queryset = Orden_Compra.objects.all()
+    queryset = Factura.objects.all()
     serializer_class = detallesSerializer
 
 @login_required
+def facturaCrear(request):    
+    if request.method == "POST":
+        form = facturaForm(request.POST)
+        if form.is_valid():            
+            orden = form.save(commit=False) 
+            orden.neto = 0
+            orden.iva = 0
+            orden.total = 0
+            orden.save()
+            return redirect('detalles', pk=orden.id_factura)
+    else:
+        form = facturaForm()
+    return render(request, 'venta/crear_ot.html', {'form': form})   
+
+@login_required
 def detallesCrearVenta(request, pk):
+    factura = Factura.objects.get(id_factura=pk)
     details = Detalle_Venta.objects.filter(orden_venta=pk)
     id = pk
-    orden = Orden_Compra.objects.get(id_compra=pk)
     if request.method == "POST" and 'btnCrear' in request.POST:
+        id_producto = request.POST['producto']
+        producto = Producto.objects.get(id_producto=id_producto)
         form = DetalleForm(request.POST)
         if form.is_valid():
             detalle = form.save(commit=False)
-            detalle.orden_venta = orden
-            detalle.total_detalle = 0
+            detalle.total_detalle = producto.precio_neto*detalle.cantidad
             detalle.paquetes = 0
+            if producto.espesor == 9:
+                detalle.piezas_paquete = 100
+            elif producto.espesor == 12:
+                detalle.piezas_paquete = 90
+            elif producto.espesor == 15:
+                detalle.piezas_paquete = 80
+            else:
+                detalle.piezas_paquete = 0
+            detalle.orden_venta_id = id
             detalle.save()
+            factura.neto = factura.neto + detalle.total_detalle
+            factura.iva = factura.iva + round(detalle.total_detalle * 0.19)
+            factura.total = factura.total + round(detalle.total_detalle * 1.19)
+            factura.save()
             return redirect('detalles', id)
-    if request.method=='POST' and 'btnFinalizar' in request.POST:
-        form = crearForm(request.POST)
-        if form.is_valid():
-            detalle = form.save(commit=False)
-            detalle.id_orden_compra = id
-            detalle.save()
-            return redirect('lista_factura')
     else:
         form = DetalleForm()
-    return render(request, 'venta/detalles_venta.html', {'form': form, 'details':details, 'orden':orden})
-
-@login_required
-def OTCrear(request):    
-    if request.method == "POST":
-        form = OrdenForm(request.POST)
-        if form.is_valid():            
-            orden = form.save(commit=False)
-            orden.save()
-            return redirect('detalles', pk=orden.id_compra)
-    else:
-        form = OrdenForm()
-    return render(request, 'venta/crear_ot.html', {'form': form})    
+    return render(request, 'venta/detalles_venta.html', {'form': form, 'details':details})
 
 class indexFactura(LoginRequiredMixin, ListView): 
     model = Factura
     login_url = '/iniciar-sesion/'
-
-@login_required
-def crearFactura(request, id):
-    if request.method == "POST":
-        form = crearForm(request.POST)
-        if form.is_valid():
-            detalle = form.save(commit=False)
-            detalle.id_orden_compra = id
-            detalle.save()
-            return redirect('lista_factura')
-    else:
-        form = DetalleForm()
-    return render(request, 'venta/continuar_factura.html', {'form': form})
 
 # from django.template import RequestContext
 from django.shortcuts import render_to_response

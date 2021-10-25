@@ -15,29 +15,40 @@
     {% if user.is_authenticated %}                          
         <form method="post" enctype="multipart/form-data">  
             {% csrf_token %}   
-            <br>                 
+            <br>         
+            <div class="mb-3">
+                <label for="codigo" class="form-label">Codigo</label>
+                {{ form.codigo|add_class:"form-control" }} 
+            </div>        
             <div class="mb-3">
                 <label for="num_pedido" class="form-label">Número de Pedido</label>
-                {{ form.num_pedido|add_class:"form-control" }} 
+                {{ form.n_pedido|add_class:"form-control" }} 
             </div>
             <div class="mb-3">
-                <label for="fecha" class="form-label">Fecha Compra</label>
-                {{ form.fecha_compra|add_class:"form-control"| attr:"type:date" }} 
+                <label for="fecha" class="form-label">Fecha Venta</label>
+                {{ form.fecha|add_class:"form-control"| attr:"type:date" }} 
             </div>
             <div class="mb-3">
-                <label for="tipo" class="form-label">Tipo de Pago</label>total o abono
+                <label for="tipo" class="form-label">Tipo de Pago</label>
                 <select class="form-control" name="tipo_pago">
                     <option value="Total" selected>Total</option>
                     <option value="Abono">Abono</option>
-                  </select>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="pago" class="form-label">Forma de Pago</label>
-                {{ form.forma_pago|add_class:"form-control" }} 
+                <select class="form-control" name="forma_pago">
+                    <option value="Efectivo" selected>Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                    <option value="Depositos">Depositos</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="facturacion" class="form-label">Tipo de Facturacióno</label>
-                {{ form.tipo_facturacion|add_class:"form-control" }} 
+                <select class="form-control" name="tipo_facturacion">
+                    <option value="Guia de Despacho" selected>Guia de Despacho</option>
+                    <option value="Por Facturar">Por Facturar</option>
+                </select> 
             </div>
             <div class="mb-3">
                 <label for="cliente" class="form-label">Cliente</label>
