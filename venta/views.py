@@ -136,7 +136,7 @@ class ventasList(generics.ListAPIView):
     serializer_class = ventaSerializer
 
 class detallesList(generics.ListAPIView):
-    queryset = Factura.objects.all()
+    queryset = Detalle_Venta.objects.all()
     serializer_class = detallesSerializer
 
 @login_required
@@ -247,14 +247,14 @@ class ReporteFacturasExcel(TemplateView):
             ws.cell(row=cont,column=2).value = factura.codigo
             ws.cell(row=cont,column=3).value = factura.n_pedido
             ws.cell(row=cont,column=4).value = factura.fecha
-            ws.cell(row=cont,column=5).value = factura.rut
-            ws.cell(row=cont,column=6).value = factura.nombre
-            ws.cell(row=cont,column=7).value = factura.direccion
-            ws.cell(row=cont,column=8).value = factura.tipo
-            ws.cell(row=cont,column=9).value = factura.descripcion_productos
-            ws.cell(row=cont,column=10).value = factura.cantidad
-            ws.cell(row=cont,column=11).value = factura.paquete
-            ws.cell(row=cont,column=12).value = factura.piezas_paquete
+            ws.cell(row=cont,column=5).value = factura.cliente.rut_cliente
+            ws.cell(row=cont,column=6).value = factura.cliente.nombre_cliente
+            ws.cell(row=cont,column=7).value = factura.cliente.direccion + ', ' + factura.cliente.comuna + ', ' + factura.cliente.region
+            #ws.cell(row=cont,column=8).value = factura.tipo
+            #ws.cell(row=cont,column=9).value = factura.descripcion_productos
+            #ws.cell(row=cont,column=10).value = factura.cantidad
+            # ws.cell(row=cont,column=11).value = factura.paquete
+            # ws.cell(row=cont,column=12).value = factura.piezas_paquete
             ws.cell(row=cont,column=13).value = factura.neto
             ws.cell(row=cont,column=14).value = factura.iva
             ws.cell(row=cont,column=15).value = factura.total

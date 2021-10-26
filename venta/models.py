@@ -22,7 +22,7 @@ class Producto(models.Model):
     precio_neto = models.IntegerField()
 
     def __str__(self):
-        return self.nombre_producto + ' ' + str(self.espesor) 
+        return self.nombre_producto + ' ' + str(self.espesor) + 'mm'
 
 class Factura(models.Model):
     id_factura = models.AutoField(primary_key=True)
@@ -44,4 +44,4 @@ class Detalle_Venta(models.Model):
     piezas_paquete = models.IntegerField()
     num_paquete = models.CharField(max_length=45)
     orden_venta = models.ForeignKey(Factura, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, related_name='detalles', on_delete=models.CASCADE)

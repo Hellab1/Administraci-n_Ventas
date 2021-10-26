@@ -39,8 +39,8 @@
                                     <th>Fecha</th>
                                     <th>Rut</th>
                                     <th>Cliente</th>
-                                    <th>Cantidad</th>
-                                    <th>Paquete</th>
+                                    <!-- <th>Cantidad</th>
+                                    <th>Paquete</th> -->
                                     <th>Neto</th>
                                     <th>IVA</th>
                                     <th>Total</th>
@@ -53,10 +53,10 @@
                                     <td>{{ factura.codigo|intcomma }}</td>
                                     <td>{{ factura.n_pedido }}</td>
                                     <td>{{ factura.fecha }}</td>
-                                    <td>{{ factura.rut }}</td>
-                                    <td>{{ factura.nombre }}</td>
-                                    <td>{{ factura.cantidad|intcomma }}</td>
-                                    <td>{{ factura.paquete }}</td>
+                                    <td>{{ factura.cliente.rut_cliente }}</td>
+                                    <td>{{ factura.cliente.nombre_cliente }}</td>
+                                    <!-- <td>{{ factura.cantidad|intcomma }}</td>
+                                    <td>{{ factura.paquete }}</td> -->
                                     <td>${{ factura.neto|intcomma }}</td>
                                     <td>${{ factura.iva|intcomma }}</td>
                                     <td>${{ factura.total|intcomma }}</td>                
